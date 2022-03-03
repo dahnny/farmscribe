@@ -64,11 +64,11 @@ function App() {
 
       try {
         window.ethereum.enable();
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
-        console.log(accounts);
-        // const accounts = await new web3.eth.getAccounts();
+        // const accounts = await window.ethereum.request({
+        //   method: "eth_accounts",
+        // });
+        // console.log(accounts);
+        const accounts = await new web3.eth.getAccounts();
         const address = accounts[0];
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
         // const signer = provider.getSigner();
