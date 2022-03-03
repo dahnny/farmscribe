@@ -1,35 +1,57 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../components/css/product2.css";
+import { addCommentApi, getProductApi } from "../actions/product";
+import { toast } from "react-toastify";
+import { uiActions } from "../slices/ui-slice";
+import { productActions } from "../slices/product-slice";
 
 const ProductItem = (props) => {
+  const dispatch = useDispatch();
+  const comments = useSelector((state) => state.product.product.comments);
+  const user = useSelector((state) => state.user);
   const { id } = useParams();
-  const [product, setProduct] = useState({})
+  const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  
+  const [comment, setComment] = useState("");
+
   useEffect(() => {
-    const product = props.products.filter((product) => product.imageHash === id);
+    dispatch(getProductApi(id));
+    const product = props.products.filter(
+      (product) => product.imageHash === id
+    );
     console.log(product);
     setProduct(product[0]);
-}, [id, props.products]);
+  }, [id, props.products, dispatch]);
 
-const increaseQuantity = ()=>{
-    setQuantity(prev=>{
-        return prev + 1
+  const increaseQuantity = () => {
+    setQuantity((prev) => {
+      return prev + 1;
     });
-}
+  };
 
-const decreaseQuantity = ()=>{
-    if(quantity === 0)return;
-    setQuantity(prev=>{
-        return prev - 1
+  const decreaseQuantity = () => {
+    if (quantity === 0) return;
+    setQuantity((prev) => {
+      return prev - 1;
     });
-}
+  };
 
-const buyProduct = (index)=>{
+  const buyProduct = (index) => {
+    if (quantity <= 0) return;
     props.buyProduct(index, quantity);
-}
+  };
+
+  const handleComment = (event) => {
+    event.preventDefault();
+    if (!user) {
+      dispatch(uiActions.setNotification("Please login to your account"));
+    } else {
+      dispatch(addCommentApi(id, { email: user.email, comment }));
+    }
+  };
 
   return (
     <>
@@ -57,7 +79,6 @@ const buyProduct = (index)=>{
                       </picture>
                     </a>
                   </div>
-
                 </div>
                 <div className="swiper-controls d-flex d-md-none align-items-center justify-content-between">
                   <a
@@ -133,25 +154,30 @@ const buyProduct = (index)=>{
                   >
                     <h5 className="title">Quantity</h5>
                     <div className="qty d-flex align-items-center justify-content-between">
-                      <span  className="qty_minus control d-flex align-items-center">
-                        <i className="icon-minus"  onClick={decreaseQuantity}/>
+                      <span className="qty_minus control d-flex align-items-center">
+                        <i className="icon-minus" onClick={decreaseQuantity} />
                       </span>
                       <input
                         className="qty_amount"
                         type="number"
                         readOnly
-                        value = {quantity}
+                        value={quantity}
                         min={1}
                         max={99}
                       />
-                      <span  className="qty_plus control d-flex align-items-center">
+                      <span className="qty_plus control d-flex align-items-center">
                         <i className="icon-plus" onClick={increaseQuantity} />
                       </span>
                     </div>
                   </div>
                   <div className="d-flex align-items-center">
-                    <span className="about_main-info_price">{product.price}DEV</span>
-                    <Link onClick={()=>buyProduct(product.index)} className="btn" >
+                    <span className="about_main-info_price">
+                      {product.price}DEV
+                    </span>
+                    <Link
+                      onClick={() => buyProduct(product.index)}
+                      className="btn"
+                    >
                       Buy
                     </Link>
                   </div>
@@ -163,7 +189,6 @@ const buyProduct = (index)=>{
                       id="productTabs"
                       data-scroll="true"
                     >
-
                       <div className="wrapper mt-5 pt-5">
                         <h4
                           className="accordion_component-item_header d-flex justify-content-between align-items-center"
@@ -173,9 +198,11 @@ const buyProduct = (index)=>{
                         >
                           <span className="wrapper">
                             {" "}
-                            Comments (<span id="reviewsCountResponsive">
-                              2
-                            </span>){" "}
+                            Comments (
+                            <span id="reviewsCountResponsive">
+                              {comments && comments.length}
+                            </span>
+                            ){" "}
                           </span>
                           <i className="icon-caret_down icon" />
                         </h4>
@@ -188,22 +215,21 @@ const buyProduct = (index)=>{
                         >
                           <div className="reviews-section">
                             <ul className="reviews-section_list">
-                              <li className="review">
-                                <div className="review_header d-sm-flex flex-wrap">
-                                  <span className="name">Dawn Fowler</span>
-                      
-                                  {/* <span className="timestamp">
+                              {comments &&
+                                comments.map((comment) => (
+                                  <li className="review">
+                                    <div className="review_header d-sm-flex flex-wrap">
+                                      <span className="name">{comment.email}</span>
+
+                                      {/* <span className="timestamp">
                                     September 30, 2021 at 9:52 am
                                   </span> */}
-                                </div>
-                                <p className="review_main">
-                                  Convallis posuere morbi leo urna molestie at
-                                  elementum. Quis auctor elit sed vulputate mi.
-                                  In nulla posuere sollicitudin aliquam
-                                  ultrices.
-                                </p>
-
-                              </li>
+                                    </div>
+                                    <p className="review_main">
+                                     {comment.comment}
+                                    </p>
+                                  </li>
+                                ))}
                             </ul>
                           </div>
                           <div className="form-section">
@@ -215,9 +241,8 @@ const buyProduct = (index)=>{
                                                       flex-column flex-lg-row flex-wrap
                                                       justify-content-between
                                                   "
-                              action="#"
-                              method="post"
                               id="reviewForm"
+                              onSubmit={handleComment}
                             >
                               <div className="field-wrapper fluid">
                                 <label
@@ -231,6 +256,7 @@ const buyProduct = (index)=>{
                                   id="reviewContent"
                                   placeholder="How do you feel about this  product"
                                   defaultValue={""}
+                                  onChange={(e) => setComment(e.target.value)}
                                 />
                               </div>
                               <div
@@ -241,10 +267,9 @@ const buyProduct = (index)=>{
                                                           justify-content-between
                                                       "
                               >
-
                                 <div className="btn-wrapper">
                                   <button className="btn" type="submit">
-                                    Leave a Reply
+                                    Leave a Comment
                                   </button>
                                 </div>
                               </div>

@@ -9,6 +9,8 @@ import {
   addDoc,
   getDoc,
   deleteDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore/lite";
 import {
   getAuth,
@@ -52,6 +54,8 @@ export {
   addDoc,
   getDoc,
   deleteDoc,
+  arrayUnion,
+  arrayRemove,
   signInWithPopup,
   googleProvider,
   facebookProvider,

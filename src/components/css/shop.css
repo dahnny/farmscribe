@@ -6154,13 +6154,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 }
 
 .offcanvas-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 19000;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(33,72,66,.5)
+
 }
 
 .offcanvas.show {

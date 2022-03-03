@@ -38,6 +38,11 @@
                 "internalType": "uint256",
                 "name": "_index",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_quantity",
+                "type": "uint256"
             }
         ],
         "name": "confirmBuy",

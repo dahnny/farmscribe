@@ -52,7 +52,7 @@ function App() {
     dispatch(uiActions.setNotification(null));
   }
 
-  const contractAddress = "0x4a1eee70E5E57d7737B189B557263c51ead22E70";
+  const contractAddress = "0x58A64De0839E4BdC9c3F1E0012FCA93Aef304F57";
 
   const { contract, address, balance } = useSelector((state) => state.contract);
 
@@ -127,7 +127,10 @@ function App() {
       dispatch(uiActions.toggle());
       await contract.methods.confirmBuy(index, quantity).send({
         from: address,
-        value: web3.utils.toWei(String(products[index].price), "Ether"),
+        value: web3.utils.toWei(
+          String(products[index].price * quantity),
+          "Ether"
+        ),
       });
       dispatch(uiActions.toggle());
     } catch (error) {
@@ -192,7 +195,7 @@ function App() {
             </Route>
             <Route path={"/product/:id"}>
               <Header balance={balance} connect={connectWallet} />
-              <ProductItem products = {products}/>
+              <ProductItem products={products} buyProduct={buyProduct} />
               <Footer />
             </Route>
           </Switch>

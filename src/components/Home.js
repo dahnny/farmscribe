@@ -21,9 +21,9 @@ const Home = (props) => {
                   and their customers together. Begin your sharing journey and
                   share your product TODAY
                 </p>
-                <a className="hero_header-btn btn" href="shop.html">
+                <Link className="hero_header-btn btn" to="/products">
                   Our Products
-                </a>
+                </Link>
               </div>
               <div className="hero_contacts">
                 <p className="hero_contacts-text">
@@ -77,7 +77,10 @@ const Home = (props) => {
                       <div className="hero_slider-slide_main">
                         <h2 className="title">{product.name}</h2>
                         <p className="text">{product.description}</p>
-                        <Link className="btn--underline" to={`/product/${product.imageHash}`}>
+                        <Link
+                          className="btn--underline"
+                          to={`/product/${product.imageHash}`}
+                        >
                           About Product
                         </Link>
                       </div>
@@ -175,11 +178,15 @@ const Home = (props) => {
                 </div>
               ))}
             </div>
-            {contract ? <Link className="featured_btn btn" to={"/products"}>
-              All Products
-            </Link>: <Link className="featured_btn btn" onClick={props.connect}>
+            {contract ? (
+              <Link className="featured_btn btn" to={"/products"}>
+                All Products
+              </Link>
+            ) : (
+              <Link className="featured_btn btn" onClick={props.connect}>
                 Connect
-            </Link>}
+              </Link>
+            )}
           </div>
         </section>
 
@@ -255,9 +262,6 @@ const Home = (props) => {
                   We are a community but best of all we are also a family. Help
                   us change the world by making our family bigger
                 </p>
-                <a className="effects_header-btn btn" href="shop.html">
-                  Join
-                </a>
               </div>
             </div>
             <div className="effects_media">
@@ -285,11 +289,11 @@ const Home = (props) => {
                 </span>
                 <div className="wrapper">
                   <h4 className="effects_list-item_header">
-                    Relief of chronic pain
+                    Faster Transactions
                   </h4>
                   <p className="effects_list-item_text">
-                    Feugiat in fermentum posuere urna nec tincidunt praesent
-                    semper feugiat pulvinar proin
+                    We help guarantee speed of transactions using our moonbeam
+                    network
                   </p>
                 </div>
               </li>
@@ -301,10 +305,9 @@ const Home = (props) => {
                   <i className="icon-heartbeat" />
                 </span>
                 <div className="wrapper">
-                  <h4 className="effects_list-item_header">Fight cancer</h4>
+                  <h4 className="effects_list-item_header">Food for all</h4>
                   <p className="effects_list-item_text">
-                    Feugiat in fermentum posuere urna nec tincidunt praesent
-                    semper feugiat pulvinar proin
+                    Everyone has access to food. There is no discrimination
                   </p>
                 </div>
               </li>
@@ -316,10 +319,12 @@ const Home = (props) => {
                   <i className="icon-head" />
                 </span>
                 <div className="wrapper">
-                  <h4 className="effects_list-item_header">Depression</h4>
+                  <h4 className="effects_list-item_header">
+                    Guaranteed Security
+                  </h4>
                   <p className="effects_list-item_text">
-                    Feugiat in fermentum posuere urna nec tincidunt praesent
-                    semper feugiat pulvinar proin
+                    Our network is not just a network. It cant be easily
+                    penetrated. Know that you are secured with us
                   </p>
                 </div>
               </li>
@@ -327,7 +332,7 @@ const Home = (props) => {
           </div>
         </section>
       </main>
-      <AddProduct createProduct = {props.createProduct}/>
+      <AddProduct createProduct={props.createProduct} />
     </>
   );
 };
