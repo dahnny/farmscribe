@@ -72,18 +72,19 @@ function App() {
         const address = accounts[0];
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
         // const signer = provider.getSigner();
-
-        const _balance = await new web3.eth.getBalance(address);
-        const balance = (_balance / 10 ** 18).toFixed(2);
-        console.log(balance);
-        const contract = await new web3.eth.Contract(
-          farmscribe,
-          contractAddress
-        );
-        // const contract = new ethers.Contract(contractAddress, farmscribe, signer)
-        dispatch(
-          contractActions.setContract({ contract, address, balance: balance })
-        );
+        if (address) {
+          const _balance = await new web3.eth.getBalance(address);
+          const balance = (_balance / 10 ** 18).toFixed(2);
+          console.log(balance);
+          const contract = await new web3.eth.Contract(
+            farmscribe,
+            contractAddress
+          );
+          // const contract = new ethers.Contract(contractAddress, farmscribe, signer)
+          dispatch(
+            contractActions.setContract({ contract, address, balance: balance })
+          );
+        }
       } catch (error) {
         dispatch(uiActions.setNotification(error.message));
       }
